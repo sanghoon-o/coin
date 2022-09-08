@@ -271,7 +271,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                         functions.logger.log(`\u{1F44C} test`, positionData.data()?.manaulMode, positionData);
                     }
 
-                    receivedMessage = 'test 완료!!!';
+                    receivedMessage = 'test 완료!!!!!!';
 
                 } else {
                     const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
