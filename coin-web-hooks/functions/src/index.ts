@@ -146,8 +146,19 @@ export const scheduledFunctionCrontab = functions.pubsub.schedule('5 11 * * *')
 
 /**
  * ChooseAutoTradingReportBot 관리자용 명령어봇
- * /ror ---> 모든 유저 수익률
- * /po 닉네임 ----> 특정유저 포지션 정보
+    설명	영문	명령어	인자	비고	이슈
+    도움말	help	/help(/h)			
+    수익률	rate of return	/ror			
+    확인	manual mode	/md			
+    정상	nor(normal)	/md nor		0	
+    이격추매스킵	sp(SeparationPyramiding)	/md sp		1	
+    모든추매스킵	ap(All Pyramiding)	/md ap		2	
+    모든시그널스킵	all(all)	/md all		3	
+    포지션종료	pc(Position Close)	/ma pc
+    추매	py(pyramiding)	/ma py	50	50%	pyramidingType은 se로 4번까지 가능
+    익절	tp(take profit)	/ma tp	50	50%	
+    로스컷	sl(stop loss)	/ma ls 	0.5	0.50%	마지막 진입가에서 계산			
+
  */
 export const telegramReportBotRouter = functions.https.onRequest(express()
     .use(cors({ origin: true})) 
@@ -167,14 +178,32 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             let receivedMessage : string = '';
 
-            // ex)/po 닉네임 (유저 포지션/레버레지/발란스 정보 리턴한다)
-            if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/po/gi) === 1 && cmdMessage.split(' ')[1] !== undefined){
+            if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/help/gi) === 1 || cmdMessage.search(/h/gi) === 1)){
 
+                receivedMessage = `\u{1F4CA} ChooseBot Amdin Commander List\r\n
+u{1F539}도움말 u{1F449} /help(/h)\r\n
+u{1F539}수익률 u{1F449} /ror\r\n
+========= Manual Mode =========
+u{1F539}메뉴얼모드 확인 u{1F449} /md
+u{1F539}정상모드 u{1F449} /md nor
+u{1F539}이격추매스킵모드 u{1F449} /md sp
+u{1F539}모든추매스킵모드 u{1F449} /md ap
+u{1F539}모든시그널스킵모드 u{1F449} /md all\r\n
+========= Manual Action =========
+u{1F539}추매 u{1F449} /ma py 50
+u{1F539}익절 u{1F449} /md tp 30
+u{1F539}로스컷 u{1F449} /ma ls 0.5
+u{1F539}포지션종료 u{1F449} /ma pc\r\n
+                `;                   
 
-                functions.logger.log(`chat_id : ${chat_id} , first_name : ${first_name}`);
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
 
-            // ex)/ror (전체 유저의 발란스 정보 리턴한다.)
-            }else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/ror/gi) === 1){
+            // ex)/ror (전체 유저의 수익률 정보 리턴한다.)
+            } else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/ror/gi) === 1){
 
                 const cid : string = 'atrbb1m';
                 
@@ -206,14 +235,6 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     })
                 }
             }  
-            // manaul mode 명령어
-            // 정상	0(normal)
-            // 이격추매스킵	1(SeparationPyramiding)
-            // 모든추매스킵	2(All Pyramiding)
-            // 모든시그널스킵	3(all)
-            // 포지션종류	4(Position Close)
-            // sub cmd가 없으면 현재 상태 및 메뉴리스트
-            // ex)/m  all(모든 시그널 스킵)
             else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/m/gi) === 1){
                 let subCmd = parseInt(cmdMessage.split(' ')[1]);
                 let receivedMessage = ''
@@ -273,6 +294,13 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
                     receivedMessage = 'test 완료!!!!!!';
 
+                }   // ex)/po 닉네임 (유저 포지션/레버레지/발란스 정보 리턴한다)
+                else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/po/gi) === 1 && cmdMessage.split(' ')[1] !== undefined){
+    
+    
+                    functions.logger.log(`chat_id : ${chat_id} , first_name : ${first_name}`);
+    
+                // ex)/ror (전체 유저의 발란스 정보 리턴한다.)
                 } else {
                     const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
                     const positionData = await positionRef?.get();
