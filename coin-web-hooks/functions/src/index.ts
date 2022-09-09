@@ -286,7 +286,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             // 추매
             }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/py/gi) === 1)){
                 const percent = parseInt(cmdMessage.split(' ')[1]);
-                if (percent !== NaN && typeof percent === 'number'){
+                if (typeof percent === 'number'){
 
                     receivedMessage = `\u{2705} 개발중 ${percent}`;
                 }else{
