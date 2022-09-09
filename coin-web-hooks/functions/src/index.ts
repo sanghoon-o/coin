@@ -146,19 +146,19 @@ export const scheduledFunctionCrontab = functions.pubsub.schedule('5 11 * * *')
 
 /**
  * ChooseAutoTradingReportBot 관리자용 명령어봇
-    설명	영문	명령어	인자	비고	이슈
-    도움말	help	/help(/h)			
-    수익률	rate of return	/ror			
-    확인	manual mode	/md			
-    정상	nor(normal)	/md nor		0	
-    이격추매스킵	sp(SeparationPyramiding)	/md sp		1	
-    모든추매스킵	ap(All Pyramiding)	/md ap		2	
-    모든시그널스킵	all(all)	/md all		3	
-    포지션종료	pc(Position Close)	/ma pc
-    추매	py(pyramiding)	/ma py	50	50%	pyramidingType은 se로 4번까지 가능
-    익절	tp(take profit)	/ma tp	50	50%	
-    로스컷	sl(stop loss)	/ma ls 	0.5	0.50%	마지막 진입가에서 계산			
-
+    설명	명령어	비고	이슈
+    도움말	/help(/h)		
+    수익률	/ror		
+    메뉴얼모드 확인	/manualMode		
+    정상	/normal	0	
+    이격추매스킵	/separationPyramidingSkip	1	
+    모든추매스킵	/allPyramidingSkip	2	
+    모든시그널스킵	/allSignalSkip	3	
+    액션 확인	/manualAction		
+    추매	/py 50	50%	pyramidingType은 se로 4번까지 가능
+    익절	/tp 30	50%	
+    로스컷	/sl 0.5	0.50%	마지막 진입가에서 계산
+    포지션종료	/positionClose		
  */
 export const telegramReportBotRouter = functions.https.onRequest(express()
     .use(cors({ origin: true})) 
@@ -178,6 +178,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             let receivedMessage : string = '';
 
+            // 도움말
             if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/help/gi) === 1 || cmdMessage.search(/h/gi) === 1)){
 
                 receivedMessage = `\u{26A0} ChooseBot Amdin Commander List\r\n
@@ -186,9 +187,9 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
 \u{1F539}메뉴얼모드 확인 \u{1F449} /manualMode
 \u{1F539}정상모드 \u{1F449} /normal
-\u{1F539}이격추매스킵모드 \u{1F449} /separationPyramidingSkip
-\u{1F539}모든추매스킵모드 \u{1F449} /allPyramidingSkip
-\u{1F539}모든시그널스킵모드 \u{1F449} /allSignalSkip\r\n
+\u{1F539}이격추매스킵 \u{1F449} /separationPyramidingSkip
+\u{1F539}모든추매스킵 \u{1F449} /allPyramidingSkip
+\u{1F539}모든시그널스킵 \u{1F449} /allSignalSkip\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Action \u{26A1}\u{26A1}\u{26A1}\u{26A1}
 \u{1F539}액션 확인 \u{1F449} /manualAction
 \u{1F539}추매 \u{1F449} /py 50
@@ -202,7 +203,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
 
-            // ex)/ror (전체 유저의 수익률 정보 리턴한다.)
+            // 수익률(전체 유저의 수익률 정보 리턴한다.)
             } else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/ror/gi) === 1){
 
                 const cid : string = 'atrbb1m';
@@ -234,7 +235,22 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                         text: receivedMessage
                     })
                 }
-            }  
+            // 메뉴얼모드 확인
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/manualMode/gi) === 1)){
+                const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                const positionData = await positionRef?.get();
+                
+                const sub = positionData.data()?.manaulMode === 0 ? '정상' : positionData.data()?.manaulMode === 1 ? '이격추매스킵' : positionData.data()?.manaulMode === 2 ? '모든추매스킵' : '모든시그널스킵';
+                receivedMessage = `\u{24C2}현재 \u{1F449} ${sub} 모드`;
+
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+
+            // ex)/ror (전체 유저의 수익률 정보 리턴한다.)
+            }
             else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/m/gi) === 1){
                 let subCmd = parseInt(cmdMessage.split(' ')[1]);
                 let receivedMessage = ''
