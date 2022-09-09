@@ -249,90 +249,116 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
 
-            // ex)/ror (전체 유저의 수익률 정보 리턴한다.)
-            }
-            else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/m/gi) === 1){
-                let subCmd = parseInt(cmdMessage.split(' ')[1]);
-                let receivedMessage = ''
+            // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
+            }else if (cmdMessage.indexOf('/') === 0 && ((cmdMessage.search(/normal/gi) === 1) || (cmdMessage.search(/separationPyramidingSkip/gi) === 1) || (cmdMessage.search(/allPyramidingSkip/gi) === 1) || (cmdMessage.search(/allSignalSkip/gi) === 1) )){
+                let manaulMode = 0;
+                let manaulModeStr = '';
+                switch(cmdMessage) { 
+                    case 'normal': { manaulMode = 0; manaulModeStr = '정상'; break; } 
+                    case 'separationPyramidingSkip':  { manaulMode = 1; manaulModeStr = '이격추매스킵'; break; } 
+                    case 'allPyramidingSkip':  { manaulMode = 2; manaulModeStr = '모든추매스킵'; break; } 
+                    case 'allSignalSkip':  { manaulMode = 3; manaulModeStr = '모든시그널스킵'; break; } 
+                 } 
 
-                if (subCmd < 4){        // 파이어베이스 update 함.
+                 for (const user of USERS) {
 
-                    for (const user of USERS) {
+                    const positionRef = admin.firestore().collection('myPositions').doc(user.email);
+                    await positionRef.update({ manaulMode: manaulMode });
+                }
+                receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
+                functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
 
-                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
-                        await positionRef.update({ manaulMode: subCmd });
-                    }
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
 
-                    const sub = subCmd === 0 ? '정상' : subCmd === 1 ? '이격추매 스킵' : subCmd === 2 ? '모든 추매 스킵' : '모든 시그널 스킵';
-                    receivedMessage = `'${sub}' 설정 완료`;
+            // 액션 확인
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/manualAction/gi) === 1)){
+                receivedMessage = `\u{2705} 개발중 `;
 
-                    functions.logger.log(`\u{1F44C} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+            // 추매
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/py/gi) === 1)){
+                const percent = parseInt(cmdMessage.split(' ')[1]);
+                if (percent !== undefined){
 
-                }else if(subCmd ===  4){            // 포지션 종료 바로 생행됨.
-                    
-                    for (const user of USERS) {
-
-                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
-
-                        const cu = new CoinUtils(
-                            user.nickName,
-                            user.email,
-                            user.binance.apiKey,
-                            user.binance.secret,
-                            'binance',
-                            { 'defaultType': 'future' } // 기본거래 선물
-                        );
-                        
-                        const results = await cu.closeBinanceFuture("BTC/USDT", positionRef, false);
-                        
-                        if (results[0].close) functions.logger.log(`\u{1F44C} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
-                    }
-
-                    receivedMessage = '로스컷 완료';
-                } else if(subCmd ===  5){            // test.
-
-                    let ownerManaulMode = 0;
-
-                    for (const user of USERS) {
-
-                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
-                        let positionData = await positionRef?.get();
-
-                        if ('sanghoono@gmail.com' === user.email) ownerManaulMode = positionData.data()?.manaulMode || 0;
-
-                        if (positionData.data()?.manaulMode === undefined){
-                            await positionRef.update({ manaulMode: positionData.data()?.manaulMode || ownerManaulMode });
-                            positionData = await positionRef?.get();
-                        }
-                        // let temManaulMode = positionData.data()?.manaulMode || ownerManaulMode;
-                        functions.logger.log(`\u{1F44C} test`, positionData.data()?.manaulMode, positionData);
-                    }
-
-                    receivedMessage = 'test 완료!!!!!!';
-
-                }   // ex)/po 닉네임 (유저 포지션/레버레지/발란스 정보 리턴한다)
-                else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/po/gi) === 1 && cmdMessage.split(' ')[1] !== undefined){
-    
-    
-                    functions.logger.log(`chat_id : ${chat_id} , first_name : ${first_name}`);
-    
-                // ex)/ror (전체 유저의 발란스 정보 리턴한다.)
-                } else {
-                    const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
-                    const positionData = await positionRef?.get();
-                    
-                    const sub = positionData.data()?.manaulMode === 0 ? '정상' : positionData.data()?.manaulMode === 1 ? '이격추매 스킵' : positionData.data()?.manaulMode === 2 ? '모든 추매 스킵' : '모든 시그널 스킵';
-                    receivedMessage = `현재 메뉴얼 모드 '${sub}'  \r\n \r\nmanaul mode 명령어 \r\n정상 /m 0 \r\n이격추매 스킵 /m 1 \r\n모든 추매 스킵 /m 2 \r\n모든 시그널 스킵 /m 3 \r\n포지션 종류 /m 4`;
+                    receivedMessage = `\u{2705} 개발중 `;
+                }else{
+                    receivedMessage = `\u{2757} 추매 비중 오류`;
                 }
 
-                if (receivedMessage !== ''){                
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+            // 익절
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/tp/gi) === 1)){
+                const percent = parseInt(cmdMessage.split(' ')[1]);
+                if (percent !== undefined){
 
-                    return res.status(200).send({
-                        method: 'sendMessage',
-                        chat_id,
-                        text: receivedMessage
-                    })
+                    receivedMessage = `\u{2705} 개발중 `;
+                }else{
+                    receivedMessage = `\u{2757} 익절 비중 오류`;
                 }
+
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+            // 스탑로스 
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/sl/gi) === 1)){
+                const percent = parseInt(cmdMessage.split(' ')[1]);
+                if (percent !== undefined){
+
+                    receivedMessage = `\u{2705} 개발중 `;
+                }else{
+                    receivedMessage = `\u{2757} 스탑로스 퍼센트 오류`;
+                }
+
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+            // 포지션종료
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/positionClose/gi) === 1)){
+
+                for (const user of USERS) {
+                    const positionRef = admin.firestore().collection('myPositions').doc(user.email);
+                    const cu = new CoinUtils(
+                        user.nickName,
+                        user.email,
+                        user.binance.apiKey,
+                        user.binance.secret,
+                        'binance',
+                        { 'defaultType': 'future' } // 기본거래 선물
+                    );
+                    
+                    const results = await cu.closeBinanceFuture("BTC/USDT", positionRef, false);
+                    
+                    if (results[0].close) functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
+                }
+
+                receivedMessage = '\u{2705} 로스컷 완료';
+
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })
+
+            // ex)/po 닉네임 (유저 포지션/레버레지/발란스 정보 리턴한다)
+            } else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/po/gi) === 1 && cmdMessage.split(' ')[1] !== undefined){
+    
+                functions.logger.log(`chat_id : ${chat_id} , first_name : ${first_name}`);
             }
 
 
