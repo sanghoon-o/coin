@@ -181,7 +181,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             // 도움말
             if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/help/gi) === 1 || cmdMessage.search(/h/gi) === 1)){
 
-                receivedMessage = `\u{26A0} ChooseBot Amdin Commander List\r\n
+                receivedMessage = `\u{1F6A8} ChooseBot Amdin Commander List\r\n
 \u{1F539}도움말 \u{1F449} /help (/h)\r\n
 \u{1F539}수익률 \u{1F449} /ror\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
@@ -288,7 +288,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 const percent = parseInt(cmdMessage.split(' ')[1]);
                 if (percent !== undefined){
 
-                    receivedMessage = `\u{2705} 개발중 `;
+                    receivedMessage = `\u{2705} 개발중 ${percent}`;
                 }else{
                     receivedMessage = `\u{2757} 추매 비중 오류`;
                 }
