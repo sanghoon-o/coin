@@ -180,21 +180,21 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/help/gi) === 1 || cmdMessage.search(/h/gi) === 1)){
 
-                receivedMessage = `\u{1F4CA} ChooseBot Amdin Commander List\r\n
-\u{1F539}도움말 \u{1F449} /help(/h)\r\n
+                receivedMessage = `\u{26A0} ChooseBot Amdin Commander List\r\n
+\u{1F539}도움말 \u{1F449} /help (/h)\r\n
 \u{1F539}수익률 \u{1F449} /ror\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
-\u{1F539}메뉴얼모드 확인 \u{1F449} /md
-\u{1F539}정상모드 \u{1F449} /md nor
-\u{1F539}이격추매스킵모드 \u{1F449} /md sp
-\u{1F539}모든추매스킵모드 \u{1F449} /md ap
-\u{1F539}모든시그널스킵모드 \u{1F449} /md all\r\n
+\u{1F539}메뉴얼모드 확인 \u{1F449} /manualMode
+\u{1F539}정상모드 \u{1F449} /normal
+\u{1F539}이격추매스킵모드 \u{1F449} /separationPyramidingSkip
+\u{1F539}모든추매스킵모드 \u{1F449} /allPyramidingSkip
+\u{1F539}모든시그널스킵모드 \u{1F449} /allSignalSkip\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Action \u{26A1}\u{26A1}\u{26A1}\u{26A1}
-\u{1F539}액션 확인 \u{1F449} /ma
-\u{1F539}추매 \u{1F449} /ma py 50
-\u{1F539}익절 \u{1F449} /md tp 30
-\u{1F539}로스컷 \u{1F449} /ma ls 0.5
-\u{1F539}포지션종료 \u{1F449} /ma pc`;                   
+\u{1F539}액션 확인 \u{1F449} /manualAction
+\u{1F539}추매 \u{1F449} /py 50
+\u{1F539}익절 \u{1F449} /tp 30
+\u{1F539}스탑로스 \u{1F449} /sl 0.5
+\u{1F539}포지션종료 \u{1F449} /positionClose`;
 
                 return res.status(200).send({
                     method: 'sendMessage',
