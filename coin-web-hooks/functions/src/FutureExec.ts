@@ -193,7 +193,7 @@ export class FutureExec{
 
                 // 익절
                 if (takeProfit && Array.isArray(takeProfit.amtPercents) && !isManualTakeProfit) {
-                    if (positionData.data()?.manaulMode.data()?.manaulMode < 3){
+                    if (positionData.data()?.manaulMode < 3){
                         const results = await cu.takeProfit({ symbol, side, leverage, positionRef, takeProfitObject: takeProfit, cid }, isDebug);
                         result.takeProfit = results[0];
                         telegramMsg = results[1];
