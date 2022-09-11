@@ -251,26 +251,28 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
             }else if (cmdMessage.indexOf('/') === 0 && ((cmdMessage.search(/normal/gi) === 1) || (cmdMessage.search(/separationPyramidingSkip/gi) === 1) || (cmdMessage.search(/allPyramidingSkip/gi) === 1) || (cmdMessage.search(/allSignalSkip/gi) === 1) )){
-                let manaulMode = 0;
+                let manaulMode = 20;
                 let manaulModeStr = '';
-                if (cmdMessage === 'normal'){manaulMode = 0; manaulModeStr = '정상';}
-                else if (cmdMessage === 'separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
-                else if (cmdMessage === 'allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
-                else if (cmdMessage === 'allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
+                if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
+                else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
+                else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
+                else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
 
-                 for (const user of USERS) {
-
-                    const positionRef = admin.firestore().collection('myPositions').doc(user.email);
-                    await positionRef.update({ manaulMode: manaulMode });
+                if (manaulMode < 4){
+                    for (const user of USERS) {
+   
+                       const positionRef = admin.firestore().collection('myPositions').doc(user.email);
+                       await positionRef.update({ manaulMode: manaulMode });
+                   }
+                   receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
+                   functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
+   
+                   return res.status(200).send({
+                       method: 'sendMessage',
+                       chat_id,
+                       text: receivedMessage
+                   })                
                 }
-                receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
-                functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
-
-                return res.status(200).send({
-                    method: 'sendMessage',
-                    chat_id,
-                    text: receivedMessage
-                })
 
             // 액션 확인
             }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/manualAction/gi) === 1)){
