@@ -179,7 +179,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             let receivedMessage : string = '';
 
             // 도움말
-            if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/help/gi) === 1 || cmdMessage.search(/h/gi) === 1)){
+            if (cmdMessage === '/help' || cmdMessage === '/h'){
 
                 receivedMessage = `\u{1F6A8} ChooseBot Amdin Commander List\r\n
 \u{1F539}도움말 \u{1F449} /help (/h)\r\n
@@ -204,7 +204,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
 
             // 수익률(전체 유저의 수익률 정보 리턴한다.)
-            } else if (cmdMessage.indexOf('/') === 0 && cmdMessage.search(/ror/gi) === 1){
+            } else if (cmdMessage === '/ror'){
 
                 const cid : string = 'atrbb1m';
                 
@@ -236,7 +236,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     })
                 }
             // 메뉴얼모드 확인
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/manualMode/gi) === 1)){
+            }else if (cmdMessage === '/manualMode'){
                 const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
                 const positionData = await positionRef?.get();
                 
@@ -250,8 +250,8 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
 
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
-            }else if (cmdMessage.indexOf('/') === 0 && ((cmdMessage.search(/normal/gi) === 1) || (cmdMessage.search(/separationPyramidingSkip/gi) === 1) || (cmdMessage.search(/allPyramidingSkip/gi) === 1) || (cmdMessage.search(/allSignalSkip/gi) === 1) )){
-                let manaulMode = 20;
+            }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' ){
+                let manaulMode = 0;
                 let manaulModeStr = '';
                 if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
                 else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
@@ -275,16 +275,22 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 }
 
             // 액션 확인
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/manualAction/gi) === 1)){
-                receivedMessage = `\u{2705} 개발중 `;
+            }else if (cmdMessage === 'manualAction'){
+                const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                const positionData = await positionRef?.get();
+                
+                receivedMessage = `\u{24C2}현재 서버 정보
+포지션 \u{1F449} ${positionData.data()?.side}
+추매 카운트 \u{1F449} ${positionData.data()?.pyramidingCount}
+익절 카운트 \u{1F449} ${positionData.data()?.takeProfitCount}`;
 
                 return res.status(200).send({
                     method: 'sendMessage',
                     chat_id,
                     text: receivedMessage
-                })
+                })                
             // 추매
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/py/gi) === 1)){
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/py/gi) === 1) && cmdMessage.split(' ')[1] !== undefined){
                 const percent = cmdMessage.split(' ')[1];
                 if (typeof percent === 'number'){
 
@@ -299,7 +305,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
             // 익절
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/tp/gi) === 1)){
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/tp/gi) === 1) && cmdMessage.split(' ')[1] !== undefined){
                 const percent = parseInt(cmdMessage.split(' ')[1]);
                 if (percent !== undefined){
 
@@ -314,7 +320,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
             // 스탑로스 
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/sl/gi) === 1)){
+            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/sl/gi) === 1) && cmdMessage.split(' ')[1] !== undefined){
                 const percent = parseInt(cmdMessage.split(' ')[1]);
                 if (percent !== undefined){
 
@@ -329,7 +335,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
             // 포지션종료
-            }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/positionClose/gi) === 1)){
+            }else if (cmdMessage === 'positionClose'){
 
                 for (const user of USERS) {
                     const positionRef = admin.firestore().collection('myPositions').doc(user.email);
