@@ -134,17 +134,13 @@ export class FutureExec{
 
                         // if ('5295328420' === telegramId){
                             // functions.logger.log('텔레그램 메세지 테스트');
-                            const result = await cu.telegramMsgTest(symbol);
-                            functions.logger.log('telegramMsgTest result', result);
+                            // const result = await cu.telegramMsgTest(symbol);
+                            // functions.logger.log('telegramMsgTest result', result);
                             // result.close = result[0]
                             // telegramMsg = result[1]
-
-                            // telegramMsg = result;
-                            // const results = await cu.stopLoss(symbol, positionRef, stopLoss.priceString,
-                            //     stopLoss.pricePercent, stopLoss.pricePercents, stopLoss.priceNumber, isDebug);
-                            // result.stopLoss = results[0];
-                            // telegramMsg = telegramMsg + results[1];
                         // }
+
+                        functions.logger.log('takeProfit 메세지 테스트', takeProfit);
                         
                     }
                 }
