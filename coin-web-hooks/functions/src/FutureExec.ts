@@ -139,8 +139,10 @@ export class FutureExec{
                             // result.close = result[0]
                             // telegramMsg = result[1]
                         // }
-
-                        functions.logger.log('takeProfit 메세지 테스트', takeProfit);
+                        const percent = 50;
+                        const takeProfitStr: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
+                        
+                        functions.logger.log('takeProfit 메세지 테스트', takeProfit, takeProfitStr);
                         
                     }
                 }
