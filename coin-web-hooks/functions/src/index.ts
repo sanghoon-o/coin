@@ -253,12 +253,10 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             }else if (cmdMessage.indexOf('/') === 0 && ((cmdMessage.search(/normal/gi) === 1) || (cmdMessage.search(/separationPyramidingSkip/gi) === 1) || (cmdMessage.search(/allPyramidingSkip/gi) === 1) || (cmdMessage.search(/allSignalSkip/gi) === 1) )){
                 let manaulMode = 0;
                 let manaulModeStr = '';
-                switch(cmdMessage) { 
-                    case 'normal': { manaulMode = 0; manaulModeStr = '정상'; break; } 
-                    case 'separationPyramidingSkip':  { manaulMode = 1; manaulModeStr = '이격추매스킵'; break; } 
-                    case 'allPyramidingSkip':  { manaulMode = 2; manaulModeStr = '모든추매스킵'; break; } 
-                    case 'allSignalSkip':  { manaulMode = 3; manaulModeStr = '모든시그널스킵'; break; } 
-                 } 
+                if (cmdMessage === 'normal'){manaulMode = 0; manaulModeStr = '정상';}
+                else if (cmdMessage === 'separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
+                else if (cmdMessage === 'allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
+                else if (cmdMessage === 'allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
 
                  for (const user of USERS) {
 
