@@ -186,7 +186,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 \u{1F539}수익률 \u{1F449} /ror\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
 \u{1F539}메뉴얼모드 확인 \u{1F449} /manualMode
-\u{1F539}정상모드 \u{1F449} /normal
+\u{1F539}정상모드 \u{1F449} /정상모드
 \u{1F539}이격추매스킵 \u{1F449} /separationPyramidingSkip
 \u{1F539}모든추매스킵 \u{1F449} /allPyramidingSkip
 \u{1F539}모든시그널스킵 \u{1F449} /allSignalSkip\r\n
@@ -269,7 +269,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                    functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
    
                 }else{
-                    if (cmdMessage === '/정상모드'){receivedMessage = `\u{26A0} ${cmdMessage}로 변경하려면 \u{1F449} /normal `;}
+                    if (cmdMessage === '/정상모드'){receivedMessage = `\u{26A0} ***정상모드***로 변경하려면 \u{1F449} /normal `;}
                     else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
                     else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
                     else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
