@@ -186,16 +186,16 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 \u{1F539}수익률 \u{1F449} /ror\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
 \u{1F539}메뉴얼모드 확인 \u{1F449} /manualMode
-\u{1F539}정상모드 \u{1F449} /정상모드
-\u{1F539}이격추매스킵 \u{1F449} /separationPyramidingSkip
-\u{1F539}모든추매스킵 \u{1F449} /allPyramidingSkip
-\u{1F539}모든시그널스킵 \u{1F449} /allSignalSkip\r\n
+\u{1F539}정상모드 \u{1F449} /toNormal
+\u{1F539}이격추매스킵 \u{1F449} /toSeparationPyramidingSkip
+\u{1F539}모든추매스킵 \u{1F449} /toAllPyramidingSkip
+\u{1F539}모든시그널스킵 \u{1F449} /toAllSignalSkip\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Action \u{26A1}\u{26A1}\u{26A1}\u{26A1}
 \u{1F539}액션 확인 \u{1F449} /manualAction
 \u{1F539}추매 \u{1F449} /py 50
 \u{1F539}익절 \u{1F449} /tp 30
 \u{1F539}스탑로스 \u{1F449} /sl 0.5
-\u{1F539}포지션종료 \u{1F449} /positionClose`;
+\u{1F539}포지션종료 \u{1F449} /toPositionClose`;
 
                 return res.status(200).send({
                     method: 'sendMessage',
@@ -251,7 +251,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
             }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' 
-                    || cmdMessage === '/정상모드' || cmdMessage === '/이격추매스킵모드' || cmdMessage === '/모든추매스킵모드' || cmdMessage === '/모든시그널스킵모드' ){
+                    || cmdMessage === '/toNormal' || cmdMessage === '/toSeparationPyramidingSkip' || cmdMessage === '/toAllPyramidingSkip' || cmdMessage === '/toAllSignalSkip' ){
                 let manaulMode = 5;
                 let manaulModeStr = '';
                 if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
@@ -269,10 +269,10 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                    functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
    
                 }else{
-                    if (cmdMessage === '/정상모드'){receivedMessage = `\u{26A0} ***정상모드***로 변경하려면 \u{1F449} /normal `;}
-                    else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
-                    else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
-                    else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
+                    if (cmdMessage === '/toNormal'){ receivedMessage = `\u{1F4A0} *정상*모드로 변경하려면 \u{1F449} /normal `; }
+                    else if (cmdMessage === '/toSeparationPyramidingSkip'){ receivedMessage = `\u{1F4A0} *이격추매스킵*모드로 변경하려면 \u{1F449} /separationPyramidingSkip `; }
+                    else if (cmdMessage === '/toAllPyramidingSkip'){ receivedMessage = `\u{1F4A0} *모든추매스킵*모드로 변경하려면 \u{1F449} /allPyramidingSkip `; }
+                    else if (cmdMessage === '/toAllSignalSkip'){ receivedMessage = `\u{1F4A0} *모든시그널스킵*모드로 변경하려면 \u{1F449} /allSignalSkip `; }
                 }
                 return res.status(200).send({
                     method: 'sendMessage',
@@ -514,25 +514,29 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
             // 포지션종료
-            }else if (cmdMessage === 'positionClose'){
+            }else if (cmdMessage === 'positionClose' || cmdMessage === 'toPositionClose'){
+                if (cmdMessage === 'positionClose'){
 
-                for (const user of USERS) {
-                    const positionRef = admin.firestore().collection('myPositions').doc(user.email);
-                    const cu = new CoinUtils(
-                        user.nickName,
-                        user.email,
-                        user.binance.apiKey,
-                        user.binance.secret,
-                        'binance',
-                        { 'defaultType': 'future' } // 기본거래 선물
-                    );
-                    
-                    const results = await cu.closeBinanceFuture("BTC/USDT", positionRef, false);
-                    
-                    if (results[0].close) functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
+                    for (const user of USERS) {
+                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
+                        const cu = new CoinUtils(
+                            user.nickName,
+                            user.email,
+                            user.binance.apiKey,
+                            user.binance.secret,
+                            'binance',
+                            { 'defaultType': 'future' } // 기본거래 선물
+                        );
+                        
+                        const results = await cu.closeBinanceFuture("BTC/USDT", positionRef, false);
+                        
+                        if (results[0].close) functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
+                    }
+    
+                    receivedMessage = '\u{2705} 로스컷 완료';
+                }else{
+                    receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \u{1F449} /positionClose `;
                 }
-
-                receivedMessage = '\u{2705} 로스컷 완료';
 
                 return res.status(200).send({
                     method: 'sendMessage',
