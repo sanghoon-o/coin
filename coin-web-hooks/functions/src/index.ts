@@ -182,20 +182,20 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             if (cmdMessage === '/help' || cmdMessage === '/h'){
 
                 receivedMessage = `\u{1F6A8} ChooseBot Amdin Commander List\r\n
-\u{1F537}도움말\u{1F537} \u{1F449} /help (/h)\r\n
-\u{1F537}수익률\u{1F537} \u{1F449} /ror\r\n
+\u{1F537}도움말 \u{1F449} /help (/h)\r\n
+\u{1F537}수익률 \u{1F449} /ror\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Mode \u{26A1}\u{26A1}\u{26A1}\u{26A1}
-\u{1F537}메뉴얼모드 확인\u{1F537} \u{1F449} /manualMode
-\u{1F536}정상모드\u{1F536} \u{1F449} /checkNormal
-\u{1F536}이격추매스킵\u{1F536} \u{1F449} /checkSeparationPySkip
-\u{1F536}모든추매스킵\u{1F536} \u{1F449} /checkAllPySkip
-\u{1F536}모든시그널스킵\u{1F536} \u{1F449} /checkAllSignalSkip\r\n
+\u{1F537}메뉴얼모드 확인 \u{1F449} /manualMode
+\u{1F536}정상모드 \u{1F449} /checkNormal
+\u{1F536}이격추매스킵 \u{1F449} /checkSeparationPySkip
+\u{1F536}모든추매스킵 \u{1F449} /checkAllPySkip
+\u{1F536}모든시그널스킵 \u{1F449} /checkAllSignalSkip\r\n
 \u{26A1}\u{26A1}\u{26A1}\u{26A1} Manual Action \u{26A1}\u{26A1}\u{26A1}\u{26A1}
-\u{1F537}액션 확인\u{1F537} \u{1F449} /manualAction
-\u{1F534}추매\u{1F534} \u{1F449} /py 50
-\u{1F534}익절\u{1F534} \u{1F449} /tp 30
-\u{1F534}스탑로스\u{1F534} \u{1F449} /sl 0.5
-\u{1F536}포지션종료\u{1F536} \u{1F449} /checkPositionClose`;
+\u{1F537}액션 확인 \u{1F449} /manualAction
+\u{1F534}추매 \u{1F449} /py 50
+\u{1F534}익절 \u{1F449} /tp 30
+\u{1F534}스탑로스 \u{1F449} /sl 0.5
+\u{1F536}포지션종료 \u{1F449} /checkPositionClose`;
 
                 return res.status(200).send({
                     method: 'sendMessage',
