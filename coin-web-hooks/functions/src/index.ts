@@ -294,7 +294,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 const percent = cmdMessage.split(' ')[1];
                 if (typeof percent === 'number' && percent > 9){
 
-                    functions.logger.log(`\u{1F448} 비중 ${percent} 매뉴얼 추매 시작`);
+                    functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 추매 시작`);
                     const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
                     const positionData = await positionRef?.get();
 
@@ -345,18 +345,18 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                             telegramMsgsArr.push(new Array(telegramId,user.nickName,telegramMsg));
                         }            
                         
-                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 처리 완료`);
+                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 매뉴얼 추매 처리 완료`);
                     }
 
                     if (telegramMsgsArr.length > 0){
                         const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
-                    for (var i=0; i<telegramMsgsArr.length; i++){
+                        for (var i=0; i<telegramMsgsArr.length; i++){
                             await cu2.sendTelegramMsg(telegramMsgsArr[i][2] + `\r\n\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}`, telegramMsgsArr[i][0]);
-                    }          
-                    
-                    functions.logger.log(telegramMsgsArr);
-                    receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 추매 완료`;
-                }
+                        }          
+                        
+                        functions.logger.log(telegramMsgsArr);
+                        receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 추매 완료`;
+                    }
                 }else{
                     receivedMessage = `\u{2757} 추매 비중 오류`;
                 }
@@ -371,7 +371,8 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 const percent = cmdMessage.split(' ')[1];
                 if (typeof percent === 'number' && percent > 9){
 
-                    functions.logger.log(`\u{1F448} 비중 ${percent} 매뉴얼 익절 시작`);
+                    functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
+                    const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
                     const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
                     const positionData = await positionRef?.get();
 
@@ -379,7 +380,6 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     const symbol : string = 'BTC/USDT';
                     const side: 'buy' | 'sell' = positionData.data()?.side;
                     const leverage: number = 10;
-                    const takeProfit: any = percent / 100;
 
                     // 텔레그램 전체 메세지
                     let telegramMsgsArr = new Array();
@@ -415,20 +415,20 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                             telegramMsgsArr.push(new Array(telegramId,user.nickName,telegramMsg));
                         }            
                         
-                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 처리 완료`);
+                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 매뉴얼 익절 처리 완료`);
                     }
 
                     if (telegramMsgsArr.length > 0){
                         const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
-                    for (var i=0; i<telegramMsgsArr.length; i++){
+                        for (var i=0; i<telegramMsgsArr.length; i++){
                             await cu2.sendTelegramMsg(telegramMsgsArr[i][2] + `\r\n\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}`, telegramMsgsArr[i][0]);
-                    }          
-                    
-                    functions.logger.log(telegramMsgsArr);
-                    receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 추매 완료`;
-                }
+                        }          
+                        
+                        functions.logger.log(telegramMsgsArr);
+                        receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 익절 완료`;
+                    }
                 }else{
-                    receivedMessage = `\u{2757} 추매 비중 오류`;
+                    receivedMessage = `\u{2757} 익절 비중 오류`;
                 }
 
                 return res.status(200).send({
@@ -438,10 +438,66 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
             // 스탑로스 
             }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/sl/gi) === 1) && cmdMessage.split(' ')[1] !== undefined){
-                const percent = parseInt(cmdMessage.split(' ')[1]);
-                if (percent !== undefined){
+                
+                let percent = cmdMessage.split(' ')[1];
+                if (typeof percent === 'number'){
 
-                    receivedMessage = `\u{2705} 개발중 `;
+                    functions.logger.log(`\u{1F448} 마지막 진입가 기준 ${percent}% 매뉴얼 스탑로스 시작`);
+                    const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const positionData = await positionRef?.get();
+
+                    const cid : string = 'atrbb1m';
+                    const symbol : string = 'BTC/USDT';
+                    const side: 'buy' | 'sell' = positionData.data()?.side;
+                    const stopLoss: any = { pricePercentBytele: (side === 'buy') ? percent * -1 : percent };
+
+                    // 텔레그램 전체 메세지
+                    let telegramMsgsArr = new Array();
+
+                    for (const user of USERS) {
+                        if (user.cid !== cid) continue;
+                        const telegramId = user.telegramId;
+
+                        // 결과 값 저장 
+                        let result = {
+                            close: false,
+                            create: false,
+                            takeProfit: false,
+                            stopLoss: false,
+                            telegram: false
+                        };
+                        
+                        const cu = new CoinUtils(
+                            user.nickName,
+                            user.email,
+                            user.binance.apiKey,
+                            user.binance.secret,
+                            'binance',
+                            { 'defaultType': 'future' } // 기본거래 선물
+                        );
+
+                        const results = await cu.stopLoss(symbol, positionRef, undefined,
+                            undefined, undefined, undefined,stopLoss.pricePercentBytele, false);
+                        result.stopLoss = results[0];
+                        let telegramMsg : string = results[1];                   
+
+                        // 매매 내용 텔레그램 메세지 보내기
+                        if ('' !== telegramMsg && '' !== telegramId){
+                            telegramMsgsArr.push(new Array(telegramId,user.nickName,telegramMsg));
+                        }            
+                        
+                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 매뉴얼 스탑로스 처리 완료`);
+                    }
+
+                    if (telegramMsgsArr.length > 0){
+                        const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
+                        for (var i=0; i<telegramMsgsArr.length; i++){
+                            await cu2.sendTelegramMsg(telegramMsgsArr[i][2] + `\r\n\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}`, telegramMsgsArr[i][0]);
+                        }          
+                        
+                        functions.logger.log(telegramMsgsArr);
+                        receivedMessage = `\u{2757} 마지막 진입가 기준 ${percent}% 매뉴얼 스탑로스 익절 완료`;
+                    }
                 }else{
                     receivedMessage = `\u{2757} 스탑로스 퍼센트 오류`;
                 }

@@ -153,7 +153,7 @@ export class FutureExec{
                         
                         functions.logger.log('수동 stopLoss 시작');
                         const results = await cu.stopLoss(symbol, positionRef, stopLoss.priceString,
-                            stopLoss.pricePercent, stopLoss.pricePercents, stopLoss.priceNumber, isDebug);
+                            stopLoss.pricePercent, stopLoss.pricePercents, stopLoss.priceNumber,undefined, isDebug);
                         result.stopLoss = results[0];
                         telegramMsg = telegramMsg + results[1];                        
                     }
@@ -207,7 +207,7 @@ export class FutureExec{
                         if ((!takeProfit && result.create) || (takeProfit && result.takeProfit)) {
                             // functions.logger.log('stopLoss 시작');
                             const results = await cu.stopLoss(symbol, positionRef, stopLoss.priceString,
-                                stopLoss.pricePercent, stopLoss.pricePercents, stopLoss.priceNumber, isDebug);
+                                stopLoss.pricePercent, stopLoss.pricePercents, stopLoss.priceNumber, undefined, isDebug);
                             result.stopLoss = results[0];
                             telegramMsg = telegramMsg + results[1];
                         }
