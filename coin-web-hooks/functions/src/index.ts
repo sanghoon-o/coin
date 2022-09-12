@@ -251,7 +251,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
             }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' 
-                    || cmdMessage === '/checkNormal' || cmdMessage === '/checkSeparationPygSkip' || cmdMessage === '/checkAllPySkip' || cmdMessage === '/checkAllSignalSkip' ){
+                    || cmdMessage === '/checkNormal' || cmdMessage === '/checkSeparationPySkip' || cmdMessage === '/checkAllPySkip' || cmdMessage === '/checkAllSignalSkip' ){
                 let manaulMode = 5;
                 let manaulModeStr = '';
                 if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
@@ -269,10 +269,10 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                    functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
    
                 }else{
-                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F6A8} *정상*모드로 변경하려면 \u{1F449} /normal `; }
-                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F6A8} *이격추매스킵*모드로 변경하려면 \u{1F449} /separationPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F6A8} *모든추매스킵*모드로 변경하려면 \u{1F449} /allPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F6A8} *모든시그널스킵*모드로 변경하려면 \u{1F449} /allSignalSkip `; }
+                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F6A8} *정상*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /normal `; }
+                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F6A8} *이격추매스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /separationPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F6A8} *모든추매스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /allPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F6A8} *모든시그널스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /allSignalSkip `; }
                 }
                 return res.status(200).send({
                     method: 'sendMessage',
@@ -535,7 +535,8 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
     
                     receivedMessage = '\u{2705} 로스컷 완료';
                 }else{
-                    receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \u{1F449} /positionClose `;
+                    //receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
+                    receivedMessage = `포지션종료`;
                 }
 
                 return res.status(200).send({
