@@ -514,7 +514,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     text: receivedMessage
                 })
             // 포지션종료
-            }else if (cmdMessage === 'positionClose' || cmdMessage === 'checkPositionClose'){
+            }else if (cmdMessage === '/positionClose' || cmdMessage === '/checkPositionClose'){
                 if (cmdMessage === 'positionClose'){
 
                     for (const user of USERS) {
@@ -535,8 +535,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
     
                     receivedMessage = '\u{2705} 로스컷 완료';
                 }else{
-                    //receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
-                    receivedMessage = `포지션종료`;
+                    receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
                 }
 
                 return res.status(200).send({
