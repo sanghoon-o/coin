@@ -250,8 +250,9 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
 
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
-            }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' ){
-                let manaulMode = 0;
+            }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' 
+                    || cmdMessage === '/정상모드' || cmdMessage === '/이격추매스킵모드' || cmdMessage === '/모든추매스킵모드' || cmdMessage === '/모든시그널스킵모드' ){
+                let manaulMode = 5;
                 let manaulModeStr = '';
                 if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
                 else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
@@ -267,12 +268,17 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                    receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
                    functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
    
-                   return res.status(200).send({
-                       method: 'sendMessage',
-                       chat_id,
-                       text: receivedMessage
-                   })                
+                }else{
+                    if (cmdMessage === '/정상모드'){receivedMessage = `\u{26A0} ${cmdMessage}로 변경하려면 \u{1F449} /normal `;}
+                    else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
+                    else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
+                    else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
                 }
+                return res.status(200).send({
+                    method: 'sendMessage',
+                    chat_id,
+                    text: receivedMessage
+                })                
 
             // 액션 확인
             }else if (cmdMessage === '/manualAction'){
