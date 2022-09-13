@@ -515,7 +515,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
             // 포지션종료
             }else if (cmdMessage === '/positionClose' || cmdMessage === '/checkPositionClose'){
-                if (cmdMessage === 'positionClose'){
+                if (cmdMessage === '/positionClose'){
 
                     for (const user of USERS) {
                         const positionRef = admin.firestore().collection('myPositions').doc(user.email);
