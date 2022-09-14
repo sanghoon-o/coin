@@ -301,12 +301,12 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 if (typeof percent === 'number' && percent > 9){
 
                     functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 추매 시작`);
-                    const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
-                    const positionData = await positionRef?.get();
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
                     const symbol : string = 'BTC/USDT';
-                    const side: 'buy' | 'sell' = positionData.data()?.side;
+                    const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
                     const leverage: number = 10;
                     const safeRatio: number = 1; 
                     const addType: 'e' | 'f' | 's' = 'f';
@@ -321,6 +321,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     for (const user of USERS) {
                         if (user.cid !== cid) continue;
                         const telegramId = user.telegramId;
+                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
 
                         // 결과 값 저장 
                         let result = {
@@ -379,12 +380,12 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
                     functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
                     const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
-                    const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
-                    const positionData = await positionRef?.get();
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
                     const symbol : string = 'BTC/USDT';
-                    const side: 'buy' | 'sell' = positionData.data()?.side;
+                    const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
                     const leverage: number = 10;
 
                     // 텔레그램 전체 메세지
@@ -393,6 +394,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     for (const user of USERS) {
                         if (user.cid !== cid) continue;
                         const telegramId = user.telegramId;
+                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
 
                         // 결과 값 저장 
                         let result = {
@@ -449,12 +451,12 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 if (typeof percent === 'number'){
 
                     functions.logger.log(`\u{1F448} 마지막 진입가 기준 ${percent}% 매뉴얼 스탑로스 시작`);
-                    const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
-                    const positionData = await positionRef?.get();
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
                     const symbol : string = 'BTC/USDT';
-                    const side: 'buy' | 'sell' = positionData.data()?.side;
+                    const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
                     const stopLoss: any = { pricePercentBytele: (side === 'buy') ? percent * -1 : percent };
 
                     // 텔레그램 전체 메세지
@@ -463,6 +465,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     for (const user of USERS) {
                         if (user.cid !== cid) continue;
                         const telegramId = user.telegramId;
+                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
 
                         // 결과 값 저장 
                         let result = {
