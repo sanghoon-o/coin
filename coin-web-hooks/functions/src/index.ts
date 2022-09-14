@@ -252,6 +252,9 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             // 정상모드 // 이격추매스킵 // 모든추매스킵 // 모든시그널스킵 
             }else if (cmdMessage === '/normal' || cmdMessage === '/separationPyramidingSkip' || cmdMessage === '/allPyramidingSkip' || cmdMessage === '/allSignalSkip' 
                     || cmdMessage === '/checkNormal' || cmdMessage === '/checkSeparationPySkip' || cmdMessage === '/checkAllPySkip' || cmdMessage === '/checkAllSignalSkip' ){
+                
+                const cid : string = 'atrbb1m';
+                        
                 let manaulMode = 5;
                 let manaulModeStr = '';
                 if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
@@ -261,6 +264,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
                 if (manaulMode < 4){
                     for (const user of USERS) {
+                        if (user.cid !== cid) continue;
    
                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
                        await positionRef.update({ manaulMode: manaulMode });
@@ -457,7 +461,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     const cid : string = 'atrbb1m';
                     const symbol : string = 'BTC/USDT';
                     const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
-                    const stopLoss: any = { pricePercentBytele: (side === 'buy') ? percent * -1 : percent };
+                    const stopLoss: any = { pricePercentByTele: (side === 'buy') ? percent * -1 : percent };
 
                     // 텔레그램 전체 메세지
                     let telegramMsgsArr = new Array();
@@ -486,7 +490,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                         );
 
                         const results = await cu.stopLoss(symbol, positionRef, undefined,
-                            undefined, undefined, undefined,stopLoss.pricePercentBytele, false);
+                            undefined, undefined, undefined,stopLoss.pricePercentByTele, false);
                         result.stopLoss = results[0];
                         let telegramMsg : string = results[1];                   
 
@@ -519,8 +523,11 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
             // 포지션종료
             }else if (cmdMessage === '/positionClose' || cmdMessage === '/checkPositionClose'){
                 if (cmdMessage === '/positionClose'){
+                    const cid : string = 'atrbb1m';
+                    const symbol : string = 'BTC/USDT';
 
                     for (const user of USERS) {
+                        if (user.cid !== cid) continue;
                         const positionRef = admin.firestore().collection('myPositions').doc(user.email);
                         const cu = new CoinUtils(
                             user.nickName,
@@ -531,7 +538,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                             { 'defaultType': 'future' } // 기본거래 선물
                         );
                         
-                        const results = await cu.closeBinanceFuture("BTC/USDT", positionRef, false);
+                        const results = await cu.closeBinanceFuture(symbol, positionRef, false);
                         
                         if (results[0].close) functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
                     }

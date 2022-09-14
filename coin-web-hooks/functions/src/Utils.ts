@@ -286,7 +286,7 @@ Size : ${amountStr} BTC \\(${amountUSDT} USDT\\) \u{1F4B0}
      * @param pricePercent 진입가의 퍼센트
      * @param pricePercents 진입가의 퍼센트 배열
      * @param priceNumber 진입가
-     * @param pricePercentBytele 텔레그램 매뉴얼 액션으로 스탑로스 변경시 마지막 진입가 기준으로 설정한다.
+     * @param pricePercentByTele 텔레그램 매뉴얼 액션으로 스탑로스 변경시 마지막 진입가 기준으로 설정한다.
      * @returns 
      */
     async stopLoss (
@@ -296,7 +296,7 @@ Size : ${amountStr} BTC \\(${amountUSDT} USDT\\) \u{1F4B0}
         pricePercent: number | undefined,
         pricePercents: number[] | undefined,
         priceNumber: number | undefined,
-        pricePercentBytele: number | undefined,
+        pricePercentByTele: number | undefined,
         isDebug: boolean = false
     ): Promise<any> {
         // firestore에 있는 내 포지션 정보를 가져와서 평단가를 가져온다. 
@@ -356,8 +356,8 @@ Size : ${amountStr} BTC \\(${amountUSDT} USDT\\) \u{1F4B0}
             stopPrice = priceNumber
         }
         // 텔레그램 매뉴얼 액션으로 스탑로스 변경시 마지막 진입가 기준으로 설정한다.
-        else if (typeof pricePercentBytele === 'number') {
-            stopPrice = ( data.lastOrderPrice * (1 + (pricePercentBytele * safeRatio * 0.01)) );
+        else if (typeof pricePercentByTele === 'number') {
+            stopPrice = ( data.lastOrderPrice * (1 + (pricePercentByTele * safeRatio * 0.01)) );
         }
         // 스탑로스 오류
         if (stopPrice <= 0) {
