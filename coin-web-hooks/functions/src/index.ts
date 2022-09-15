@@ -379,66 +379,67 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 })
             // 익절
             }else if (cmdMessage.indexOf('/') === 0 && (cmdMessage.search(/tp/gi) === 1) && cmdMessage.split(' ')[1] !== undefined){
-                const percent = cmdMessage.split(' ')[1];
+                const percent = parseInt(cmdMessage.split(' ')[1]);
                 if (typeof percent === 'number' && percent > 9){
 
-                    functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
-                    const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
-                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
-                    const ownerPositionData = await ownerPositionRef?.get();
+                    // functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
+                    // const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
+                    // const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    // const ownerPositionData = await ownerPositionRef?.get();
 
-                    const cid : string = 'atrbb1m';
-                    const symbol : string = 'BTC/USDT';
-                    const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
-                    const leverage: number = 10;
+                    // const cid : string = 'atrbb1m';
+                    // const symbol : string = 'BTC/USDT';
+                    // const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
+                    // const leverage: number = 10;
 
-                    // 텔레그램 전체 메세지
-                    let telegramMsgsArr = new Array();
+                    // // 텔레그램 전체 메세지
+                    // let telegramMsgsArr = new Array();
 
-                    for (const user of USERS) {
-                        if (user.cid !== cid) continue;
-                        const telegramId = user.telegramId;
-                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
+                    // for (const user of USERS) {
+                    //     if (user.cid !== cid) continue;
+                    //     const telegramId = user.telegramId;
+                    //     const positionRef = admin.firestore().collection('myPositions').doc(user.email);
 
-                        // 결과 값 저장 
-                        let result = {
-                            close: false,
-                            create: false,
-                            takeProfit: false,
-                            stopLoss: false,
-                            telegram: false
-                        };
+                    //     // 결과 값 저장 
+                    //     let result = {
+                    //         close: false,
+                    //         create: false,
+                    //         takeProfit: false,
+                    //         stopLoss: false,
+                    //         telegram: false
+                    //     };
                         
-                        const cu = new CoinUtils(
-                            user.nickName,
-                            user.email,
-                            user.binance.apiKey,
-                            user.binance.secret,
-                            'binance',
-                            { 'defaultType': 'future' } // 기본거래 선물
-                        );
+                    //     const cu = new CoinUtils(
+                    //         user.nickName,
+                    //         user.email,
+                    //         user.binance.apiKey,
+                    //         user.binance.secret,
+                    //         'binance',
+                    //         { 'defaultType': 'future' } // 기본거래 선물
+                    //     );
 
-                        const results = await cu.takeProfit({ symbol, side, leverage, positionRef, takeProfitObject: takeProfit, cid }, false);
-                        result.takeProfit = results[0];
-                        let telegramMsg : string = results[1];
+                    //     const results = await cu.takeProfit({ symbol, side, leverage, positionRef, takeProfitObject: takeProfit, cid }, false);
+                    //     result.takeProfit = results[0];
+                    //     let telegramMsg : string = results[1];
 
-                        // 매매 내용 텔레그램 메세지 보내기
-                        if ('' !== telegramMsg && '' !== telegramId){
-                            telegramMsgsArr.push(new Array(telegramId,user.nickName,telegramMsg));
-                        }            
+                    //     // 매매 내용 텔레그램 메세지 보내기
+                    //     if ('' !== telegramMsg && '' !== telegramId){
+                    //         telegramMsgsArr.push(new Array(telegramId,user.nickName,telegramMsg));
+                    //     }            
                         
-                        functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 매뉴얼 익절 처리 완료`);
-                    }
+                    //     functions.logger.log(`\u{1F448} ${user.nickName} - ${user.email} 매뉴얼 익절 처리 완료`);
+                    // }
 
-                    if (telegramMsgsArr.length > 0){
-                        const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
-                        for (var i=0; i<telegramMsgsArr.length; i++){
-                            await cu2.sendTelegramMsg(telegramMsgsArr[i][2] + `\r\n\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}`, telegramMsgsArr[i][0]);
-                        }          
+                    // if (telegramMsgsArr.length > 0){
+                    //     const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
+                    //     for (var i=0; i<telegramMsgsArr.length; i++){
+                    //         await cu2.sendTelegramMsg(telegramMsgsArr[i][2] + `\r\n\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}\u{1F680}`, telegramMsgsArr[i][0]);
+                    //     }          
                         
-                        functions.logger.log(telegramMsgsArr);
-                        receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 익절 완료`;
-                    }
+                    //     functions.logger.log(telegramMsgsArr);
+                    //     receivedMessage = `\u{2757} 비중 ${percent}% 매뉴얼 익절 완료`;
+                    // }
+                    receivedMessage = `\u{2757} 익절 비중 ${percent}%`;
                 }else{
                     receivedMessage = `\u{2757} 익절 비중 오류`;
                 }
