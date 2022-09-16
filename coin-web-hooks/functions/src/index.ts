@@ -270,13 +270,13 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                        await positionRef.update({ manaulMode: manaulMode });
                    }
                    receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
-                   functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, receivedMessage);  
+                   functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, cmdMessage, receivedMessage);  
    
                 }else{
-                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F6A8} *정상*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /normal `; }
-                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F6A8} *이격추매스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /separationPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F6A8} *모든추매스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /allPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F6A8} *모든시그널스킵*모드로 변경하려면 \r\n\u{1F449}\u{1F449}\u{1F449} /allSignalSkip `; }
+                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F44D} *정상* \u{1F44D} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /normal `; }
+                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F4A3} *이격추매스킵* \u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /separationPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3} *모든추매스킵* \u{1F4A3}\u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3}\u{1F4A3} *모든시그널스킵* \u{1F4A3}\u{1F4A3}\u{1F4A3}모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allSignalSkip `; }
                 }
                 return res.status(200).send({
                     method: 'sendMessage',
@@ -545,7 +545,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
     
                     receivedMessage = '\u{2705} 로스컷 완료';
                 }else{
-                    receivedMessage = `\u{1F6AB} *포지션종료* 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
+                    receivedMessage = `\u{1F6AB}\u{1F6AB}\u{1F6AB} *포지션종료* \u{1F6AB}\u{1F6AB}\u{1F6AB} 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
                 }
 
                 return res.status(200).send({
