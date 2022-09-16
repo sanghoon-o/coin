@@ -337,8 +337,8 @@ Size : ${amountStr} BTC \\(${amountUSDT} USDT\\) \u{1F4B0}
             stopPrice = data.pyramidingAvePrice;
         }
         // pricePercent는 lastOrderPrice 를 기준으로 buy 포지션인 경우에는 - sell 포지션인 경우에는 + 퍼센트로 계산하여 스탑로스를 건다. 
-        // 포변 / 1차 추매는 pyramidingAvePrice가 lastOrderPrice와 같다. 즉 paramidingGap = 0 이다.(1분봉 ATR 매매봇 #29)
-        // 2차 추매 sell일때 일반적으로 2차 추매 가격이 추매평단보단 위에 있다. 즉 paramidingGap 양수가 나오고 stopLoss 계산가격에서 빼주면 stopLoss를 짧게 잡는다.
+        // 포변 / 1차 추매는 pyramidingAvePrice가 lastOrderPrice와 같다. 즉 pyramidingGap = 0 이다.(1분봉 ATR 매매봇 #29)
+        // 2차 추매 sell일때 일반적으로 2차 추매 가격이 추매평단보단 위에 있다. 즉 pyramidingGap 양수가 나오고 stopLoss 계산가격에서 빼주면 stopLoss를 짧게 잡는다.
         else if (typeof pricePercent === 'number') {
             let paramidingGap = data.pyramidingAvePrice ? data.lastOrderPrice - data.pyramidingAvePrice : 0.0; 
             stopPrice = ( data.lastOrderPrice * (1 + (pricePercent * safeRatio * 0.01)) ) - paramidingGap;
