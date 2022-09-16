@@ -340,8 +340,8 @@ Size : ${amountStr} BTC \\(${amountUSDT} USDT\\) \u{1F4B0}
         // 포변 / 1차 추매는 pyramidingAvePrice가 lastOrderPrice와 같다. 즉 pyramidingGap = 0 이다.(1분봉 ATR 매매봇 #29)
         // 2차 추매 sell일때 일반적으로 2차 추매 가격이 추매평단보단 위에 있다. 즉 pyramidingGap 양수가 나오고 stopLoss 계산가격에서 빼주면 stopLoss를 짧게 잡는다.
         else if (typeof pricePercent === 'number') {
-            let paramidingGap = data.pyramidingAvePrice ? data.lastOrderPrice - data.pyramidingAvePrice : 0.0; 
-            stopPrice = ( data.lastOrderPrice * (1 + (pricePercent * safeRatio * 0.01)) ) - paramidingGap;
+            let pyramidingGap = data.pyramidingAvePrice ? data.lastOrderPrice - data.pyramidingAvePrice : 0.0; 
+            stopPrice = ( data.lastOrderPrice * (1 + (pricePercent * safeRatio * 0.01)) ) - pyramidingGap;
         }
         else if (Array.isArray(pricePercents)) {
             // 익절 카운트 보다 한개 적게 해야 한다.
