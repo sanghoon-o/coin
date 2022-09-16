@@ -256,11 +256,11 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 const cid : string = 'atrbb1m';
                         
                 let manaulMode = 5;
-                let manaulModeStr = '';
-                if (cmdMessage === '/normal'){manaulMode = 0; manaulModeStr = '정상';}
-                else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; manaulModeStr = '이격추매스킵';}
-                else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; manaulModeStr = '모든추매스킵';}
-                else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; manaulModeStr = '모든시그널스킵';}
+                let receivedMessage = '';
+                if (cmdMessage === '/normal'){manaulMode = 0; receivedMessage = `\u{1F44D} 정상 \u{1F44D} 모드 설정 완료`;}
+                else if (cmdMessage === '/separationPyramidingSkip'){manaulMode = 1; receivedMessage = `\u{1F4A3} 이격추매스킵 \u{1F4A3} 모드 설정 완료`;}
+                else if (cmdMessage === '/allPyramidingSkip'){manaulMode = 2; receivedMessage = `\u{1F4A3}\u{1F4A3} 모든추매스킵 \u{1F4A3}\u{1F4A3} 모드 설정 완료`;}
+                else if (cmdMessage === '/allSignalSkip'){manaulMode = 3; receivedMessage = `\u{1F4A3}\u{1F4A3}\u{1F4A3} 모든시그널스킵 \u{1F4A3}\u{1F4A3}\u{1F4A3} 모드 설정 완료`;}
 
                 if (manaulMode < 4){
                     for (const user of USERS) {
@@ -268,15 +268,14 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
    
                        const positionRef = admin.firestore().collection('myPositions').doc(user.email);
                        await positionRef.update({ manaulMode: manaulMode });
-                   }
-                   receivedMessage = `\u{2705} ${manaulModeStr} 설정 완료`;
-                   functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, cmdMessage, receivedMessage);  
+                    }
+                    functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name}`, cmdMessage, receivedMessage);  
    
                 }else{
-                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F44D} *정상* \u{1F44D} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /normal `; }
-                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F4A3} *이격추매스킵* \u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /separationPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3} *모든추매스킵* \u{1F4A3}\u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allPyramidingSkip `; }
-                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3}\u{1F4A3} *모든시그널스킵* \u{1F4A3}\u{1F4A3}\u{1F4A3}모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allSignalSkip `; }
+                    if (cmdMessage === '/checkNormal'){ receivedMessage = `\u{1F44D} 정상 \u{1F44D} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /normal `; }
+                    else if (cmdMessage === '/checkSeparationPySkip'){ receivedMessage = `\u{1F4A3} 이격추매스킵 \u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /separationPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllPySkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3} 모든추매스킵 \u{1F4A3}\u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allPyramidingSkip `; }
+                    else if (cmdMessage === '/checkAllSignalSkip'){ receivedMessage = `\u{1F4A3}\u{1F4A3}\u{1F4A3} 모든시그널스킵 \u{1F4A3}\u{1F4A3}\u{1F4A3} 모드로 \r\n변경하려면 \u{1F449}\u{1F449}\u{1F449} /allSignalSkip `; }
                 }
                 return res.status(200).send({
                     method: 'sendMessage',
@@ -543,9 +542,9 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                         if (results[0].close) functions.logger.log(`\u{2705} chat_id : ${chat_id} , first_name : ${first_name} 메뉴얼 모드로 로스컷 완료`);
                     }
     
-                    receivedMessage = '\u{2705} 로스컷 완료';
+                    receivedMessage = '\u{1F6AB}\u{1F6AB}\u{1F6AB} 로스컷 완료 \u{1F6AB}\u{1F6AB}\u{1F6AB}';
                 }else{
-                    receivedMessage = `\u{1F6AB}\u{1F6AB}\u{1F6AB} *포지션종료* \u{1F6AB}\u{1F6AB}\u{1F6AB} 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
+                    receivedMessage = `\u{1F6AB}\u{1F6AB}\u{1F6AB} 포지션종료 \u{1F6AB}\u{1F6AB}\u{1F6AB} 즉시 실행 \r\n\u{1F449}\u{1F449}\u{1F449} /positionClose `;
                 }
 
                 return res.status(200).send({
