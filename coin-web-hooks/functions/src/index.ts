@@ -382,7 +382,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 if (typeof percent === 'number' && percent > 9){
 
                     functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
-                    const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
+                    let takeProfit: any;
                     const ownerPositionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                     const ownerPositionData = await ownerPositionRef?.get();
 
@@ -390,7 +390,18 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                     const symbol : string = 'BTC/USDT';
                     const side: 'buy' | 'sell' = ownerPositionData.data()?.side;
                     const leverage: number = 10;
+                    const takeProfitCount = ownerPositionData.data()?.takeProfitCount;
 
+                    if (takeProfitCount === 0)
+                        takeProfit = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
+                    else if (takeProfitCount === 1)
+                        takeProfit = { amtPercents: [0,percent,0,0], delayMinutes: 0 };
+                    else if (takeProfitCount === 2)
+                        takeProfit = { amtPercents: [0,0,percent,0], delayMinutes: 0 };
+                    else if (takeProfitCount === 3)
+                        takeProfit = { amtPercents: [0,0,0,percent], delayMinutes: 0 };
+
+                        
                     // 텔레그램 전체 메세지
                     let telegramMsgsArr = new Array();
 
