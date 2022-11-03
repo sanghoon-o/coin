@@ -237,7 +237,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 }
             // 메뉴얼모드 확인
             }else if (cmdMessage === '/manualMode'){
-                const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                const positionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                 const positionData = await positionRef?.get();
                 
                 const sub = positionData.data()?.manaulMode === 0 ? '정상' : positionData.data()?.manaulMode === 1 ? '이격추매스킵' : positionData.data()?.manaulMode === 2 ? '모든추매스킵' : '모든시그널스킵';
@@ -285,7 +285,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
             // 액션 확인
             }else if (cmdMessage === '/manualAction'){
-                const positionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                const positionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                 const positionData = await positionRef?.get();
                 
                 receivedMessage = `\u{24C2}현재 서버 정보
@@ -304,7 +304,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 if (typeof percent === 'number' && percent > 9){
 
                     functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 추매 시작`);
-                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                     const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
@@ -383,7 +383,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
 
                     functions.logger.log(`\u{1F448} 비중 ${percent}% 매뉴얼 익절 시작`);
                     const takeProfit: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
-                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                     const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
@@ -454,7 +454,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
                 if (typeof percent === 'number'){
 
                     functions.logger.log(`\u{1F448} 마지막 진입가 기준 ${percent}% 매뉴얼 스탑로스 시작`);
-                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('sanghoono@gmail.com');
+                    const ownerPositionRef = admin.firestore().collection('myPositions').doc('jinho2588@naver.com');
                     const ownerPositionData = await ownerPositionRef?.get();
 
                     const cid : string = 'atrbb1m';
