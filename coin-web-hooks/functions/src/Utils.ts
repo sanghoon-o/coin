@@ -130,8 +130,8 @@ export class CoinUtils {
         const ex = this.exchange;
         const symObj = this.parseSymbol(symbol);
         let balance = await ex.fetchBalance();
+        functions.logger.log('balance info', balance);
         let positions = balance.info.positions || [];
-        functions.logger.log('positions info', positions);
         let myPosition = positions.filter((p: any) => p.symbol === symObj.futureName).pop();
         functions.logger.log('myPosition info', myPosition);
         return myPosition;
