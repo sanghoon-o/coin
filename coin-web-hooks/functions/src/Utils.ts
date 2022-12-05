@@ -128,6 +128,7 @@ export class CoinUtils {
      */
     async myPosition (symbol: string): Promise<any> {
         const ex = this.exchange;
+        functions.logger.log('ex info', ex);
         const symObj = this.parseSymbol(symbol);
         let balance = await ex.fetchBalance();
         functions.logger.log('balance info', balance);

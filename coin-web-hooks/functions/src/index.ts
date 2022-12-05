@@ -84,31 +84,31 @@ export const historyCreatedAt = functions.firestore.document('myPositions/{docId
 /**
  * 개인별 계좌 발란스 텔레그램 메세지 발송 스케쥴러
  */
- export const sendBalanceFunctionCrontab = functions.pubsub.schedule('5 12 * * *')
-    .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 10시 5분 발송
-    .onRun(async (context) => {
+//  export const sendBalanceFunctionCrontab = functions.pubsub.schedule('5 12 * * *')
+//     .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 10시 5분 발송
+//     .onRun(async (context) => {
 
-        const cid : string = 'atrbb1m';
+//         const cid : string = 'atrbb1m';
 
-        for (const user of USERS) {
-            if (user.cid !== cid) continue;
-            const cu = new CoinUtils(
-                user.nickName,
-                user.email,
-                user.binance.apiKey,
-                user.binance.secret,
-                'binance',
-                { 'defaultType': 'future' } // 기본거래 선물
-            );
+//         for (const user of USERS) {
+//             if (user.cid !== cid) continue;
+//             const cu = new CoinUtils(
+//                 user.nickName,
+//                 user.email,
+//                 user.binance.apiKey,
+//                 user.binance.secret,
+//                 'binance',
+//                 { 'defaultType': 'future' } // 기본거래 선물
+//             );
 
-            const userBalance = await cu.getBalance(user.seed);
-            if ('' !== userBalance && '' !== user.telegramId){
-                    await cu.sendTelegramMsg(`\u{1F4CA} Daily Report \r\n닉네임 시드 PNL 발란스 수익률\r\n${userBalance.replace(/\-/g, "\\-").replace(/\./g, "\\.")}\u{1F4AA}\u{1F4AF}\u{1F4AA}\u{1F4AF}\u{1F4AA}\u{1F4AF}`, user.telegramId);
-            }
-        }
+//             const userBalance = await cu.getBalance(user.seed);
+//             if ('' !== userBalance && '' !== user.telegramId){
+//                     await cu.sendTelegramMsg(`\u{1F4CA} Daily Report \r\n닉네임 시드 PNL 발란스 수익률\r\n${userBalance.replace(/\-/g, "\\-").replace(/\./g, "\\.")}\u{1F4AA}\u{1F4AF}\u{1F4AA}\u{1F4AF}\u{1F4AA}\u{1F4AF}`, user.telegramId);
+//             }
+//         }
 
-        return null;
-    });
+//         return null;
+//     });
 
 /**
  * 관리자 통계 스케쥴러
