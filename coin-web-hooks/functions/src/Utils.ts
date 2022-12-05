@@ -131,7 +131,9 @@ export class CoinUtils {
         const symObj = this.parseSymbol(symbol);
         let balance = await ex.fetchBalance();
         let positions = balance.info.positions || [];
+        functions.logger.log('positions info', positions);
         let myPosition = positions.filter((p: any) => p.symbol === symObj.futureName).pop();
+        functions.logger.log('myPosition info', myPosition);
         return myPosition;
     }
 
@@ -735,7 +737,7 @@ Size : ${amountStr} BTC \\(${costStr} USDT\\)
         // const leverage : number = 10;
         const myPosition = await this.myPosition(symbol);
         functions.logger.log('myPosition info', myPosition);
-        
+
         // 거래소에서 현재가를 가져온다.
         let tiker = await this.getExchange().fetchTicker(symbol, { 'type': 'future' });
 
