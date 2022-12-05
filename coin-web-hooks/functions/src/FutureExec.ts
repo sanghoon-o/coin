@@ -132,17 +132,17 @@ export class FutureExec{
                 if (leverage === -999 && !isManualEntry) {
                     if (addType === 'e') {
 
-                        // if ('5295328420' === telegramId){
-                            // functions.logger.log('텔레그램 메세지 테스트');
-                            // const result = await cu.telegramMsgTest(symbol);
-                            // functions.logger.log('telegramMsgTest result', result);
-                            // result.close = result[0]
-                            // telegramMsg = result[1]
-                        // }
-                        const percent = 50;
-                        const takeProfitStr: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
+                        if ('5295328420' === telegramId){
+                            functions.logger.log('텔레그램 메세지 테스트');
+                            const result = await cu.telegramMsgTest(symbol);
+                            functions.logger.log('telegramMsgTest result', result);
+                            result.close = result[0]
+                            telegramMsg = result[1]
+                        }
+                        // const percent = 50;
+                        // const takeProfitStr: any = { amtPercents: [percent ,0,0,0], delayMinutes: 0 };
                         
-                        functions.logger.log('takeProfit 메세지 테스트', takeProfit, takeProfitStr);
+                        // functions.logger.log('takeProfit 메세지 테스트', takeProfit, takeProfitStr);
                         
                     }
                 }

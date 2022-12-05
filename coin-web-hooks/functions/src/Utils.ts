@@ -734,7 +734,8 @@ Size : ${amountStr} BTC \\(${costStr} USDT\\)
 
         // const leverage : number = 10;
         const myPosition = await this.myPosition(symbol);
-
+        functions.logger.log('myPosition info', myPosition);
+        
         // 거래소에서 현재가를 가져온다.
         let tiker = await this.getExchange().fetchTicker(symbol, { 'type': 'future' });
 
