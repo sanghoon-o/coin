@@ -132,7 +132,7 @@ export class FutureExec{
                 if (leverage === -999 && !isManualEntry) {
                     if (addType === 'e') {
 
-                        if ('5295328420' === telegramId){
+                        if ('48717538' === telegramId){
                             functions.logger.log('텔레그램 메세지 테스트');
                             const result = await cu.telegramMsgTest(symbol);
                             functions.logger.log('telegramMsgTest result', result);
