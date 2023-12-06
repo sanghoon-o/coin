@@ -3,10 +3,10 @@ import * as admin from "firebase-admin";
 // import { USERS } from "./Constants";
 // import { CoinUtils } from "./Utils";
 // import { CommonUtils } from "./CommonUtils";
-import { FutureExec } from "./FutureExec";
+// import { FutureExec } from "./FutureExec";
 // import * as express from 'express';
 // import * as cors from 'cors';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 
 // const isDebug: boolean = false;
 
@@ -26,21 +26,21 @@ export const binanceFutureRouter = functions
         // 파라미터 로깅
         functions.logger.log(`\u{2705} input params`, req.body);
 
-        const binanceFuture1 = `https://us-central1-coin-web-hooks.cloudfunctions.net/binanceFuture1`
-        const binanceFuture2 = `https://us-central1-coin-web-hooks.cloudfunctions.net/binanceFuture2`
+        // const binanceFuture1 = `https://us-central1-coin-web-hooks.cloudfunctions.net/binanceFuture1`
+        // const binanceFuture2 = `https://us-central1-coin-web-hooks.cloudfunctions.net/binanceFuture2`
 
-        await Promise.all([
-            fetch(binanceFuture1, {
-                method: 'post',
-                body: JSON.stringify(req.body),
-                headers: {'Content-Type': 'application/json'}
-            }),
-            fetch(binanceFuture2, {
-                method: 'post',
-                body: JSON.stringify(req.body),
-                headers: {'Content-Type': 'application/json'}
-            })
-        ]);
+        // await Promise.all([
+        //     fetch(binanceFuture1, {
+        //         method: 'post',
+        //         body: JSON.stringify(req.body),
+        //         headers: {'Content-Type': 'application/json'}
+        //     }),
+        //     fetch(binanceFuture2, {
+        //         method: 'post',
+        //         body: JSON.stringify(req.body),
+        //         headers: {'Content-Type': 'application/json'}
+        //     })
+        // ]);
 
         res.send('ok');
     });
@@ -51,11 +51,12 @@ export const binanceFutureRouter = functions
 export const binanceFuture1 = functions
     .runWith({ timeoutSeconds: 240 })
     .https.onRequest(async (req, res) => {
-        const groupCd = 1;
+        functions.logger.log(`\u{2705} input params`, req.body);
+        // const groupCd = 1;
 
-        const result = await FutureExec.execute(groupCd, req.body);
+        // const result = await FutureExec.execute(groupCd, req.body);
         
-        res.send(result);
+        // res.send(result);
     });
 
     /**
@@ -64,22 +65,23 @@ export const binanceFuture1 = functions
 export const binanceFuture2 = functions
     .runWith({ timeoutSeconds: 240 })
     .https.onRequest(async (req, res) => {
-        const groupCd = 2;
+        functions.logger.log(`\u{2705} input params`, req.body);
+        // const groupCd = 2;
 
-        const result = await FutureExec.execute(groupCd, req.body);
+        // const result = await FutureExec.execute(groupCd, req.body);
 
-        res.send(result);
+        // res.send(result);
     });
 
 
 
-export const historyCreatedAt = functions.firestore.document('myPositions/{docId}/histories/{historyId}')
-    .onCreate(async (history, context) => {
-        await history.ref.set({
-            createdAt: history.createTime,
-            updatedAt: new Date(history.data().updateTime)
-        }, { merge: true });
-    });
+// export const historyCreatedAt = functions.firestore.document('myPositions/{docId}/histories/{historyId}')
+//     .onCreate(async (history, context) => {
+//         await history.ref.set({
+//             createdAt: history.createTime,
+//             updatedAt: new Date(history.data().updateTime)
+//         }, { merge: true });
+//     });
 
 /**
  * 개인별 계좌 발란스 텔레그램 메세지 발송 스케쥴러
