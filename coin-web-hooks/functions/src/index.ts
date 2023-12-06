@@ -1,11 +1,11 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { USERS } from "./Constants";
-import { CoinUtils } from "./Utils";
+// import { USERS } from "./Constants";
+// import { CoinUtils } from "./Utils";
 // import { CommonUtils } from "./CommonUtils";
 import { FutureExec } from "./FutureExec";
-import * as express from 'express';
-import * as cors from 'cors';
+// import * as express from 'express';
+// import * as cors from 'cors';
 import fetch from 'node-fetch';
 
 // const isDebug: boolean = false;
@@ -113,36 +113,36 @@ export const historyCreatedAt = functions.firestore.document('myPositions/{docId
 /**
  * 관리자 통계 스케쥴러
  */
-export const scheduledFunctionCrontab = functions.pubsub.schedule('6 11 * * *')
-    .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 9시 5분 발송
-    .onRun(async (context) => {
+// export const scheduledFunctionCrontab = functions.pubsub.schedule('6 11 * * *')
+//     .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 9시 5분 발송
+//     .onRun(async (context) => {
 
-        let usersBalance : string = '';
-        const cid : string = 'atrbb1m';
+//         let usersBalance : string = '';
+//         const cid : string = 'atrbb1m';
 
-        for (const user of USERS) {
-            if (user.cid !== cid) continue;
-            const cu = new CoinUtils(
-                user.nickName,
-                user.email,
-                user.binance.apiKey,
-                user.binance.secret,
-                'binance',
-                { 'defaultType': 'future' } // 기본거래 선물
-            );
+//         for (const user of USERS) {
+//             if (user.cid !== cid) continue;
+//             const cu = new CoinUtils(
+//                 user.nickName,
+//                 user.email,
+//                 user.binance.apiKey,
+//                 user.binance.secret,
+//                 'binance',
+//                 { 'defaultType': 'future' } // 기본거래 선물
+//             );
 
-            const userBalance = await cu.getBalance(user.seed);
-            usersBalance = usersBalance + userBalance;
-        }
-        if ('' === usersBalance) {
-            functions.logger.log(`유저 발란스 리포트 생성 실패!`);
-            return null;
-        }
-        const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
-        await cu2.sendUserBalance(usersBalance);
+//             const userBalance = await cu.getBalance(user.seed);
+//             usersBalance = usersBalance + userBalance;
+//         }
+//         if ('' === usersBalance) {
+//             functions.logger.log(`유저 발란스 리포트 생성 실패!`);
+//             return null;
+//         }
+//         const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
+//         await cu2.sendUserBalance(usersBalance);
 
-        return null;
-    });
+//         return null;
+//     });
 
 /**
  * ChooseAutoTradingReportBot 관리자용 명령어봇
@@ -160,6 +160,7 @@ export const scheduledFunctionCrontab = functions.pubsub.schedule('6 11 * * *')
     로스컷	/sl 0.5	0.50%	마지막 진입가에서 계산
     포지션종료	/positionClose		
  */
+/*
 export const telegramReportBotRouter = functions.https.onRequest(express()
     .use(cors({ origin: true})) 
     .post('/', async (req, res) => {
@@ -574,7 +575,7 @@ export const telegramReportBotRouter = functions.https.onRequest(express()
         }
         return res.status(200).send({status: 'An error occurred'})
     }));
-
+*/
 
 
 // export const test = functions.https.onRequest(async (req, res) => {
