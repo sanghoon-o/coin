@@ -113,36 +113,36 @@ export const historyCreatedAt = functions.firestore.document('myPositions/{docId
 /**
  * 관리자 통계 스케쥴러
  */
-// export const scheduledFunctionCrontab = functions.pubsub.schedule('5 11 * * *')
-//     .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 9시 5분 발송
-//     .onRun(async (context) => {
+export const scheduledFunctionCrontab = functions.pubsub.schedule('6 11 * * *')
+    .timeZone('Asia/Sakhalin') // UTC+11(대한민국 UTC+9)('5 11 * * *') 대한민국시간 매일 오전 9시 5분 발송
+    .onRun(async (context) => {
 
-//         let usersBalance : string = '';
-//         const cid : string = 'atrbb1m';
+        let usersBalance : string = '';
+        const cid : string = 'atrbb1m';
 
-//         for (const user of USERS) {
-//             if (user.cid !== cid) continue;
-//             const cu = new CoinUtils(
-//                 user.nickName,
-//                 user.email,
-//                 user.binance.apiKey,
-//                 user.binance.secret,
-//                 'binance',
-//                 { 'defaultType': 'future' } // 기본거래 선물
-//             );
+        for (const user of USERS) {
+            if (user.cid !== cid) continue;
+            const cu = new CoinUtils(
+                user.nickName,
+                user.email,
+                user.binance.apiKey,
+                user.binance.secret,
+                'binance',
+                { 'defaultType': 'future' } // 기본거래 선물
+            );
 
-//             const userBalance = await cu.getBalance(user.seed);
-//             usersBalance = usersBalance + userBalance;
-//         }
-//         if ('' === usersBalance) {
-//             functions.logger.log(`유저 발란스 리포트 생성 실패!`);
-//             return null;
-//         }
-//         const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
-//         await cu2.sendUserBalance(usersBalance);
+            const userBalance = await cu.getBalance(user.seed);
+            usersBalance = usersBalance + userBalance;
+        }
+        if ('' === usersBalance) {
+            functions.logger.log(`유저 발란스 리포트 생성 실패!`);
+            return null;
+        }
+        const cu2 = new CoinUtils('nickName','email','apiKey','secret','binance',{ 'defaultType': 'future' });
+        await cu2.sendUserBalance(usersBalance);
 
-//         return null;
-//     });
+        return null;
+    });
 
 /**
  * ChooseAutoTradingReportBot 관리자용 명령어봇
